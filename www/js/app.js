@@ -1,3 +1,4 @@
+(function(){
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -18,12 +19,14 @@ angular.module('starter', ['ionic'])
   });
 })
 
-app.controller('ListCtrl', function($scope){
-  $scope.goals = goals;
+.controller('ListCtrl', function(){
+  this.goals = [
+    { title: 'Stop Smoking', progress: 35 },
+    { title: 'Daily Run', progress: 55 },
+    { title: 'App Development', progress: 80 }
+    ];
 });
 
-var goals = [
-    { title: 'Stop Smoking', progress: 0.35 },
-    { title: 'Daily Run', progress: 0.55 },
-    { title: 'App Development', progress: 0.8 }
-  ];
+
+  
+})();
