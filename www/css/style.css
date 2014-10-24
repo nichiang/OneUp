@@ -1,1 +1,46 @@
 /* Empty. Add your own CSS if you like */
+
+input[type="range"] {
+  display: inline-block;
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-right: 2px;
+  padding-left: 1px;
+  width: auto;
+  height: 50px;
+  outline: none;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ccc), color-stop(100%, #ccc));
+  background: linear-gradient(to right, #ccc 0%, #ccc 100%);
+  background-position: center;
+  background-size: 99% 4px;
+  background-repeat: no-repeat;
+  -webkit-appearance: none; }
+  input[type="range"]::-webkit-slider-thumb {
+  	-webkit-appearance: none;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 0px;
+    background-image: url('../img/ionic.png');
+    background-size:40px;
+	background-repeat: no-repeat;
+	background-position: 50%;
+    box-shadow: none;
+    cursor: pointer; }
+  input[type="range"]::-webkit-slider-thumb:before {
+    /* what creates the colorful line on the left side of the slider */
+    position: absolute;
+    top: 18px;
+    left: -2001px;
+    width: 2000px;
+    height: 4px;
+    background: #444;
+    content: ' '; }
+  input[type="range"]::-webkit-slider-thumb:after {
+    /* create a larger (but hidden) hit area */
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    padding: 30px;
+    content: ' '; }
