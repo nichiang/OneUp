@@ -1,19 +1,47 @@
-<div class="modal">
-  <ion-header-bar>
-    <h1 class="title">Goal</h1>
+<div class="modal" style="width: 100%; min-height: 80%; top: 10%;">
+  <ion-header-bar align-title="left">
+    <h1 class="title">{{currentGoal.title}}</h1>
+    <button class="button button-clear button-dark" ng-click="resetDate(); closeGoalModal();">
+      <i class="icon ion-close"></i>
+    </button>
   </ion-header-bar>
-  <ion-content>
-    <div class="list">
-      <label class="item item-input">
-        <span class="input-label">Name</span>
-        <input type="text">
-      </label>
-      <label class="item item-input">
-        <span class="input-label">Info</span>
-        <input type="text">
-      </label>
+  <ion-content style="padding: 5px;">
+    <div class="row">
+      <div class="col col-center">
+        <input type="range" disabled min="0" max="100" value="{{currentGoal.progress}}" style="width: 90%">
+      </div>
+      <div class="col col-20 col-center">
+        <button class="button button-positive">
+          <i class="icon ion-checkmark"></i>
+        </button>
+      </div>
     </div>
 
-    <button class="button button-full button-energized" ng-click="closeGoalModal()">Done</button>
+    <div class="row">
+      <div class="col">{{currentDate|dateString}}</div>
+    </div>
+
+    <div class="row">
+      <div class="col col-center" style="text-align: left;">
+        <button class="button button-small button-clear button-dark" ng-click="prevMonth()">
+          <i class="icon ion-chevron-left"></i>
+        </button>
+      </div>
+      <div class="col col-75">
+        <table style="width: 100%;">
+          <tr ng-repeat="week in [0, 1, 2, 3, 4, 5]">
+            <td ng-repeat="day in generateCalendar(week)" style="text-align: center;">
+              <span class="{{day|calendarDayStyle:currentDate}}">{{day|calendarDay:currentDate}}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col col-center" style="text-align: right;">
+        <button class="button button-small button-clear button-dark" ng-click="nextMonth()">
+          <i class="icon ion-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
   </ion-content>
 </div>
