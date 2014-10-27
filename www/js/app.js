@@ -1,6 +1,6 @@
 (function(){
 
-  var app = angular.module('OneUp', ['ionic', 'OneUp-Goal'])
+  var app = angular.module('OneUp', ['ionic', 'OneUp-Goal', 'OneUp-AddGoal', 'OneUp-Settings'])
 
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -17,9 +17,9 @@
 
   app.controller('ListCtrl', function($scope){
     $scope.goals = [
-      { title: 'Stop Smoking', progress: 35 },
-      { title: 'Daily Run', progress: 55 },
-      { title: 'App Development', progress: 80 }
+      { title: 'Stop Smoking', progress: 35, icon: "ion-no-smoking", theme: "red" },
+      { title: 'Daily Run', progress: 50, icon: "ion-trophy", theme: "green" },
+      { title: 'App Development', progress: 80, icon: "ion-iphone", theme: "blue" }
       ];
   });
   

@@ -1,14 +1,14 @@
-<div class="modal" style="width: 100%; min-height: 80%; top: 10%;">
+<div class="modal card" style="width: 90%; min-height: 90%; top: 5%; left: 5%; margin: 0;">
   <ion-header-bar align-title="left">
     <h1 class="title">{{currentGoal.title}}</h1>
     <button class="button button-clear button-dark" ng-click="resetDate(); closeGoalModal();">
       <i class="icon ion-close"></i>
     </button>
   </ion-header-bar>
-  <ion-content style="padding: 5px;">
+  <ion-content style="padding: 10px;">
     <div class="row">
       <div class="col col-center">
-        <input type="range" disabled min="0" max="100" value="{{currentGoal.progress}}" style="width: 90%">
+        <input type="range" ng-class="currentGoal.icon" disabled min="0" max="100" value="{{currentGoal.progress}}" style="width: 90%">
       </div>
       <div class="col col-20 col-center">
         <button class="button button-positive">
@@ -31,7 +31,7 @@
         <table style="width: 100%;">
           <tr ng-repeat="week in [0, 1, 2, 3, 4, 5]">
             <td ng-repeat="day in generateCalendar(week)" style="text-align: center;">
-              <span class="{{day|calendarDayStyle:currentDate}}">{{day|calendarDay:currentDate}}</span>
+              <span ng-class="day|calendarDayStyle:currentDate">{{day|calendarDay:currentDate}}</span>
             </td>
           </tr>
         </table>

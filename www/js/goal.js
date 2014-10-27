@@ -1,8 +1,8 @@
 (function(){
   
-  var app = angular.module('OneUp-Goal', ['ionic'])
+  var goal = angular.module('OneUp-Goal', ['ionic'])
 
-  app.controller('GoalCtrl', function($scope, $ionicModal){
+  goal.controller('GoalCtrl', function($scope, $ionicModal){
     $scope.currentDate = new Date();
     $scope.currentDate.setDate(1);
 
@@ -13,8 +13,8 @@
       $scope.modal = modal
     })  
 
-    $scope.openGoalModal = function(goal) {
-      $scope.currentGoal = goal;
+    $scope.openGoalModal = function(g) {
+      $scope.currentGoal = g;
       $scope.currentDate = new Date();
       $scope.currentDate.setDate(1);
 
@@ -50,7 +50,7 @@
     };
   });
 
-  app.filter('dateString', function() {
+  goal.filter('dateString', function() {
     return function(input) {
       var month = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -58,7 +58,7 @@
     };
   });
 
-  app.filter('calendarDay', function() {
+  goal.filter('calendarDay', function() {
     return function(input, date) {
       if (input < 1) {
         var d = new Date(date.getFullYear(), date.getMonth(), 0);
@@ -74,7 +74,7 @@
     };
   });
 
-  app.filter('calendarDayStyle', function() {
+  goal.filter('calendarDayStyle', function() {
     return function(input, date) {
       if (input < 1 || input > getDaysInMonth(date)) {
         return "notCurrentMonth";
