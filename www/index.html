@@ -23,7 +23,7 @@
     <script src="js/add-goal.js"></script>
     <script src="js/settings.js"></script>
   </head>
-  <body ng-app="OneUp" style="background-image: url('img/header-bg.jpg'); background-size: 100%;">
+  <body ng-app="OneUp" class="platform-android" style="background-image: url('img/header-bg.jpg'); background-size: 100%;">
     <ion-header-bar align-title="left" class="bar-clear">
       <h1 class="title">OneUp!</h1>
       <div class="buttons">
@@ -32,30 +32,33 @@
         </button>
       </div>
     </ion-header-bar>
-    <ion-content has-bouncing="true">
+    <ion-content has-bouncing="true" overflow-scroll="true">
       <ion-list ng-controller="ListCtrl">
 
         <ion-item style="background-color: transparent; border-width: 0">
           <div style="height: 150px"></div>
         </ion-item>
 
-        <ion-item ng-repeat="goal in goals">
-          <div class="row" ng-controller="GoalCtrl">
+        <ion-item ng-repeat="goal in goals" ng-controller="GoalCtrl">
+          <div class="row">
             <div class="col col-center" ng-click="openGoalModal(goal)">
               <h2>{{goal.title}}</h2>
-              <div class="row">
-                <div class="col col-center" style="flex: 0 0 calc({{goal.progress}}% - {{1 - goal.progress/100}} * 40px); max-width: calc({{goal.progress}}% - {{1 - goal.progress/100}} * 40px);">
-                  <div style="width: 100%; height: 4px; background-color: {{goal.theme}}; content: ' ';"></div>
+              <div class="row" style="height: 40px; position: relative;">
+                <div class="col col-center" style="flex: 0 0 {{goal.progress}}%; max-width: {{goal.progress}}%;">
+                  <div ng-class="goal.theme + '-bg'" style="width: 100%; height: 4px; content: ' ';"></div>
                 </div>
-                <div class="col ion" ng-class="goal.icon" style="max-width: 40px; min-width: 10px; font-size: 40px; color: {{goal.theme}}; text-align: center;"></div>
                 <div class="col col-center">
                   <div style="width: 100%; height: 4px; background-color: silver; content: ' ';"></div>
                 </div>
+                <div class="goalIcon" ng-class="goal.theme" style="left: calc({{goal.progress}}% - ({{goal.progress}} / 100 * {{iconWidths[goal.icon] + 4}}px)); width: {{iconWidths[goal.icon] + 4}}px;">
+                  <i class="{{goal.icon}}"></i>
+                </div>
               </div>
             </div>
-            <div class="col col-20 col-center" style="text-align: center;">
-              <button class="button button-positive">
-                <i class="icon ion-checkmark"></i>
+            <div class="col col-33 col-center" style="text-align: right;">
+              <button ng-class="checkTodayClass(goal)" ng-click="checkTodayToggle(goal)">
+                <span ng-hide="goal.checkedToday">Day 27</span>
+                <i class="icon ion-checkmark" ng-show="goal.checkedToday"></i>
               </button>
             </div>
           </div>
@@ -63,7 +66,7 @@
 
         <ion-item>
           <div style="text-align: center;" ng-controller="AddGoalCtrl" ng-click="openAddModal()">
-            <button class="button button-clear button-positive">
+            <button class="button button-large button-clear button-positive">
               <i class="icon ion-plus"></i>
             </button>
           </div>

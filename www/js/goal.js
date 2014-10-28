@@ -6,12 +6,13 @@
     $scope.currentDate = new Date();
     $scope.currentDate.setDate(1);
 
+
     $ionicModal.fromTemplateUrl('goal-modal.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
       $scope.modal = modal
-    })  
+    });
 
     $scope.openGoalModal = function(g) {
       $scope.currentGoal = g;
@@ -19,7 +20,7 @@
       $scope.currentDate.setDate(1);
 
       $scope.modal.show()
-    }
+    };
 
     $scope.closeGoalModal = function() {
       $scope.modal.hide();

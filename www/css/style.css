@@ -1,9 +1,67 @@
 /* Empty. Add your own CSS if you like */
 
+/*
+Icon list:
+
+ion-arrow-right-b
+ion-flag
+ion-heart
+ion-settings
+ion-document-text
+ion-map
+ion-pie-graph
+ion-aperture
+ion-iphone
+ion-code
+ion-bug
+ion-game-controller-b
+ion-videocamera
+ion-music-note
+ion-cash
+ion-trophy
+ion-university
+ion-beaker
+ion-lightbulb
+ion-no-smoking
+*/
+
+.goalIcon {
+  position: absolute; 
+  top: 0px; 
+  font-size: 40px; 
+  text-align: center; 
+  background-color: #fff;
+}
+
+.checkTodayButton {
+	min-width: 80px; 
+	min-height: 80px; 
+	border-radius: 40px;
+}
+
 .currentMonth {
 	color: #000;
 }
 
 .notCurrentMonth {
 	color: #ddd;
+}
+
+.addItem {
+  height: 70px;
+  padding: 10px !important;
+}
+
+.popoverRow {
+  height: 70px;
+}
+
+.popoverCol {
+  text-align: center;
+}
+
+.popoverButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
 }
