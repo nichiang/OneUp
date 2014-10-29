@@ -1,18 +1,18 @@
 <div class="modal card" style="width: 90%; min-height: 90%; top: 5%; left: 5%; margin: 0;">
   <ion-header-bar align-title="left">
-    <h1 class="title">Add Goal</h1>
+    <h1 class="title">New Goal</h1>
     <button class="button button-clear button-dark" ng-click="closeAddModal();">
       <i class="icon ion-close"></i>
     </button>
   </ion-header-bar>
   <ion-content style="padding: 10px;" overflow-scroll="true">
-    <form name="addGoalForm">
+    <form name="addGoalForm" ng-submit="addGoal()">
       <div class="row item addItem">
         <div class="col col-center">
           Goal
         </div>
         <div class="col col-center">
-          <input type="text" placeholder="Goal Title" ng-model="goalTitle" style="text-align: right;" />
+          <input type="text" placeholder="Goal Title" required ng-model="newGoal.title" style="text-align: right;" />
         </div>
       </div>
       <div class="row item addItem">
@@ -20,8 +20,17 @@
           Target Date
         </div>
         <div class="col col-center" style="text-align: right;">
-          <span ng-bind="targetDate|date:'yyyy-MM-dd'" ng-click="getDate()"></span>
+          <span ng-bind="newGoal.targetDate|date:'yyyy-MM-dd'" ng-click="getDate()"></span>
           <i class="icon button-positive ion-calendar"></i>
+        </div>
+      </div>
+      <div class="row item addItem">
+        <div class="col col-center">
+          Icon
+        </div>
+        <div class="col col-center" style="text-align: right;" ng-click="popover.show($event)" ng-controller="PickIconCtrl">
+          <i class="icon" ng-class="newGoal.icon" ng-show="newGoal.icon"></i>
+          <i class="icon ion-arrow-down-b"></i>
         </div>
       </div>
       <div class="row item addItem">
@@ -29,16 +38,13 @@
           Color
         </div>
         <div class="col col-center" style="text-align: right;" ng-click="popover.show($event)" ng-controller="PickColorCtrl">
-          <i class="icon ion-record" ng-class="theme" ng-show="theme"></i>
+          <i class="icon ion-record" ng-class="newGoal.theme" ng-show="newGoal.theme"></i>
           <i class="icon ion-arrow-down-b"></i>
         </div>
       </div>
-      <div class="row item addItem">
-        <div class="col col-center">
-          Icon
-        </div>
+      <div class="row addItem">
         <div class="col col-center" style="text-align: right;">
-          <i class="icon ion-arrow-down-b"></i>
+          <input type="submit" class="button button-positive" value="Add Goal" />
         </div>
       </div>
     </form>

@@ -15,6 +15,7 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="js/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -27,7 +28,7 @@
     <ion-header-bar align-title="left" class="bar-clear">
       <h1 class="title">OneUp!</h1>
       <div class="buttons">
-        <button class="button button-clear button-light" ng-controller="SettingsCtrl" ng-click="openSettingsModal()">
+        <button class="button button-clear button-light" ng-controller="SettingsCtrl" on-tap="openSettingsModal()">
           <i class="icon ion-gear-a"></i>
         </button>
       </div>
@@ -41,7 +42,7 @@
 
         <ion-item ng-repeat="goal in goals" ng-controller="GoalCtrl">
           <div class="row">
-            <div class="col col-center" ng-click="openGoalModal(goal)">
+            <div class="col col-center" on-tap="openGoalModal(goal)">
               <h2>{{goal.title}}</h2>
               <div class="row" style="height: 40px; position: relative;">
                 <div class="col col-center" style="flex: 0 0 {{goal.progress}}%; max-width: {{goal.progress}}%;">
@@ -56,8 +57,8 @@
               </div>
             </div>
             <div class="col col-33 col-center" style="text-align: right;">
-              <button ng-class="checkTodayClass(goal)" ng-click="checkTodayToggle(goal)">
-                <span ng-hide="goal.checkedToday">Day 27</span>
+              <button ng-class="checkTodayClass(goal)" on-tap="checkTodayToggle(goal)">
+                <span ng-hide="goal.checkedToday">Day {{goal.progress|dayCount}}</span>
                 <i class="icon ion-checkmark" ng-show="goal.checkedToday"></i>
               </button>
             </div>
@@ -65,7 +66,7 @@
         </ion-item>
 
         <ion-item>
-          <div style="text-align: center;" ng-controller="AddGoalCtrl" ng-click="openAddModal()">
+          <div style="text-align: center;" ng-controller="AddGoalCtrl" on-tap="openAddModal()">
             <button class="button button-large button-clear button-positive">
               <i class="icon ion-plus"></i>
             </button>

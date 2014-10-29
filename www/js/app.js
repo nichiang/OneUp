@@ -2,6 +2,25 @@
 
   var app = angular.module('OneUp', ['ionic', 'OneUp-Goal', 'OneUp-AddGoal', 'OneUp-Settings'])
 
+  tempDate = new Date();
+  tempStartDate1 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 7);
+  tempStartDate2 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 36);
+  tempStartDate3 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 21);
+
+  var goals = [
+                { title: 'Stop Smoking', icon: "ion-no-smoking", theme: "positive", checkedToday: true, startDate: tempStartDate1 },
+                { title: 'Daily Run', icon: "ion-trophy", theme: "assertive", checkedToday: false, startDate: tempStartDate2 },
+                { title: 'App Development', icon: "ion-iphone", theme: "calm", checkedToday: true, startDate: tempStartDate3 }
+              ];
+
+  function updateGoals() {
+    var today = new Date();
+
+    for (i = 0; i < goals.length; i++) {
+      goals[i].progress = (today - goals[i].startDate) / 86400000;
+    }
+  }
+
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -12,12 +31,20 @@
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
+
+      updateGoals();
+
+      $ionicPlatform.ready(function() {
+        document.addEventListener("resume", function() {
+          updateGoals();
+        }, false);
+      });
     });
   });
 
   app.controller('ListCtrl', function($scope){
     $scope.iconWidths = {
-      'ion-arrow-right-b': 15,
+      'ion-arrow-right-c': 28,
       'ion-flag': 30,
       'ion-heart': 33,
       'ion-settings': 33,
@@ -39,11 +66,11 @@
       'ion-no-smoking': 35
     };
 
-    $scope.goals = [
-      { title: 'Stop Smoking', progress: 30, icon: "ion-no-smoking", theme: "positive", checkedToday: true },
-      { title: 'Daily Run', progress: 75, icon: "ion-trophy", theme: "assertive", checkedToday: false },
-      { title: 'App Development', progress: 66, icon: "ion-iphone", theme: "calm", checkedToday: true }
-    ];
+    $scope.goals = goals;
+    
+    $scope.updateGoals = function() {
+      updateGoals();
+    };
 
     $scope.checkTodayToggle = function(g) {
       g.checkedToday = !g.checkedToday;
@@ -58,4 +85,10 @@
     };
   });
   
+  app.filter('dayCount', function() {
+    return function(input) {
+      return Math.ceil(input);
+    };
+  });
+
 })();
