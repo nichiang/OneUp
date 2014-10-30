@@ -30,10 +30,8 @@
     });
 
     $scope.getDate = function() {
-      $ionicPlatform.ready(function() {
-        $cordovaDatePicker.show({date: new Date(), mode: 'date'}).then(function(date){
-          $scope.newGoal.targetDate = date;
-        }, false);
+      datePicker.show({date: $scope.newGoal.targetDate, mode: 'date'}, function(date){
+        $scope.newGoal.targetDate = date; 
       });
     };
 
