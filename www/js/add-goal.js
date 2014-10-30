@@ -2,7 +2,7 @@
   
   var addGoal = angular.module('OneUp-AddGoal', ['ionic'])
 
-  addGoal.controller('AddGoalCtrl', function($scope, $ionicModal){
+  addGoal.controller('AddGoalCtrl', function($scope, $ionicModal, $window){
     $ionicModal.fromTemplateUrl('add-modal.html', {
       scope: $scope,
       animation: 'slide-in-up'
@@ -12,6 +12,7 @@
 
     $scope.openAddModal = function() {
       $scope.newGoal = {};
+      $scope.newGoal.goalId = $scope.goals.length;
       $scope.newGoal.startDate = new Date();
       $scope.newGoal.targetDate = new Date($scope.newGoal.startDate.getFullYear(), $scope.newGoal.startDate.getMonth(), $scope.newGoal.startDate.getDate() + 7);
       $scope.newGoal.icon = "ion-arrow-right-c";
@@ -38,8 +39,9 @@
 
     $scope.addGoal = function() {
       $scope.goals.push($scope.newGoal);
+      $window.localStorage['goals'] = JSON.stringify($scope.goals);
 
-      $scope.updateGoals();
+      $scope.closeAddModal();
     }
   });
 

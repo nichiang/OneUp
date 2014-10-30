@@ -1,25 +1,6 @@
 (function(){
 
-  var app = angular.module('OneUp', ['ionic', 'OneUp-Goal', 'OneUp-AddGoal', 'OneUp-Settings'])
-
-  tempDate = new Date();
-  tempStartDate1 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 7);
-  tempStartDate2 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 36);
-  tempStartDate3 = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() - 21);
-
-  var goals = [
-                { title: 'Stop Smoking', icon: "ion-no-smoking", theme: "positive", checkedToday: true, startDate: tempStartDate1 },
-                { title: 'Daily Run', icon: "ion-trophy", theme: "assertive", checkedToday: false, startDate: tempStartDate2 },
-                { title: 'App Development', icon: "ion-iphone", theme: "calm", checkedToday: true, startDate: tempStartDate3 }
-              ];
-
-  function updateGoals() {
-    var today = new Date();
-
-    for (i = 0; i < goals.length; i++) {
-      goals[i].progress = (today - goals[i].startDate) / 86400000;
-    }
-  }
+  var app = angular.module('OneUp', ['ionic', 'ngCordova', 'OneUp-Goal', 'OneUp-AddGoal', 'OneUp-Settings']);
 
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -31,18 +12,10 @@
       if(window.StatusBar) {
         StatusBar.styleDefault();
       }
-
-      updateGoals();
-
-      $ionicPlatform.ready(function() {
-        document.addEventListener("resume", function() {
-          updateGoals();
-        }, false);
-      });
     });
   });
 
-  app.controller('ListCtrl', function($scope){
+  app.controller('ListCtrl', function($scope, $window){
     $scope.iconWidths = {
       'ion-arrow-right-c': 28,
       'ion-flag': 30,
@@ -66,10 +39,15 @@
       'ion-no-smoking': 35
     };
 
-    $scope.goals = goals;
-    
-    $scope.updateGoals = function() {
-      updateGoals();
+    $scope.goals = angular.fromJson($window.localStorage['goals'] || '[]');
+    console.log($scope.goals);
+
+    $scope.getProgress = function(g) {
+      var today = new Date();
+      var start = Date.parse(g.startDate);
+      var end = Date.parse(g.targetDate);
+
+      return ((today - start) / (end - start)) * 100;
     };
 
     $scope.checkTodayToggle = function(g) {
@@ -84,10 +62,23 @@
       }
     };
   });
-  
-  app.filter('dayCount', function() {
+
+/*  app.filter('progress', function() {
     return function(input) {
-      return Math.ceil(input);
+      var today = new Date();
+      var start = Date.parse(input.startDate);
+      var end = Date.parse(input.targetDate);
+
+      return ((today - start) / (end - start)) * 100;
+    };
+  });*/
+
+  app.filter('progressDay', function() {
+    return function(input) {
+      var today = new Date();
+      var start = Date.parse(input.startDate);
+
+      return Math.ceil((today - start) / 86400000);
     };
   });
 
