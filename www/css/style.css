@@ -94,8 +94,6 @@ ion-no-smoking
 }
 
 .goalBack {
-  background-color: #aaa;
-
   /* goalBack starts as front facing to allow browser to prerender div before flip animation */
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);

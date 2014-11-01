@@ -15,7 +15,7 @@
     });
   });
 
-  app.controller('ListCtrl', function($scope, $window){
+  app.controller('ListCtrl', function($scope, $window, $document, $ionicScrollDelegate){
     $scope.iconWidths = {
       'ion-arrow-right-c': 28,
       'ion-flag': 30,
@@ -40,14 +40,35 @@
     };
 
     $scope.goals = angular.fromJson($window.localStorage['goals'] || '[]');
-    console.log($scope.goals);
+
+    $scope.headerScrollPosition = 0;
+
+    $scope.scrollHeader = function() {
+      var amt = 0 - ($ionicScrollDelegate.getScrollPosition().top * 0.5);
+      var fadeAmt = 1 - (($ionicScrollDelegate.getScrollPosition().top - 80) / 30);
+
+      ionic.requestAnimationFrame(function() {
+        var appHeader = $document[0].body.querySelector('#appHeader');
+        var headerElements = $document[0].body.querySelector('.headerElements');
+
+        appHeader.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + amt + 'px, 0)';
+        
+        headerElements.style.opacity = fadeAmt;
+
+        if (fadeAmt <= 0) {
+          headerElements.style.visibility = "hidden";  
+        } else {
+          headerElements.style.visibility = "visible";  
+        }
+      });
+    }
 
     $scope.getProgress = function(g) {
       var today = new Date();
       var start = Date.parse(g.startDate);
       var end = Date.parse(g.targetDate);
 
-      return ((today - start) / (end - start)) * 100;
+      return Math.min(((today - start) / (end - start)) * 100, 100);
     };
 
     $scope.checkTodayToggle = function(g) {
@@ -81,5 +102,6 @@
       return Math.ceil((today - start) / 86400000);
     };
   });
+
 
 })();
