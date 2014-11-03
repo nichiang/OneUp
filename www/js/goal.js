@@ -1,10 +1,10 @@
 (function(){
   
-  var goal = angular.module('OneUp-Goal', ['ionic'])
+  var goal = angular.module('OneUp-Goal', ['ionic', 'angular-inview']);
 
-  goal.controller('GoalCtrl', function($scope, $ionicModal, $timeout){
-    $scope.currentDate = new Date();
-    $scope.currentDate.setDate(1);
+  goal.controller('GoalCtrl', function($scope, $ionicModal, $ionicScrollDelegate, $timeout, $location){
+    $scope.displayWeeks = [];
+
     $scope.showFlipped = false;
     $scope.backStyle = {};
 
@@ -17,9 +17,11 @@
 
     $scope.openGoalModal = function(g) {
       $scope.currentGoal = g;
-      $scope.currentDate = new Date();
-      $scope.currentDate.setDate(1);
       $scope.showFlipped = false;
+      
+      $scope.currentMonth = moment().startOf('month');
+      $scope.displayWeeks = [];
+      $scope.initCalendar();
 
       $scope.modal.show()
     };
@@ -47,66 +49,57 @@
         $scope.backStyle = {'-webkit-transform': 'rotateY(180deg)', 'transform': 'rotateY(180deg)'};
         $scope.showFlipped = true;
       }
+    };
+
+    $scope.initCalendar = function() {
+      var displayWeeksStart = moment($scope.currentGoal.startDate).startOf('month');
+      var displayWeeksEnd = moment().endOf('month');
+      var displayWeeksDiff = displayWeeksEnd.diff(displayWeeksStart, 'weeks');
+
+      $scope.displayWeeks.push({'week': displayWeeksStart.week(), 'year': displayWeeksStart.year()});
+
+      for (i = 0; i <= displayWeeksDiff; i++) {
+        $scope.displayWeeks.push({'week': displayWeeksStart.add(1, 'weeks').week(), 'year': displayWeeksStart.year()});
+      }
+
+      $ionicScrollDelegate.$getByHandle('calendar').scrollBottom(false);
     }
 
-    $scope.generateCalendar = function(week) {
-      var weekArray = [];
-      var day = 1 - $scope.currentDate.getDay() + week * 7;
+    $scope.getDaysOfWeek = function(w) {
+      var daysOfWeek = [];
 
       for (i = 0; i < 7; i++) {
-        weekArray.push(day);
-        day++;
+        daysOfWeek.push(moment().year(w.year).week(w.week).day(i).date());
       }
 
-      return weekArray;
+      return daysOfWeek;
     };
 
-    $scope.prevMonth = function() {
-      $scope.currentDate.setMonth($scope.currentDate.getMonth() - 1);
-    };
-
-    $scope.nextMonth = function() {
-      $scope.currentDate.setMonth($scope.currentDate.getMonth() + 1);
-    };
-  });
-
-  goal.filter('dateString', function() {
-    return function(input) {
-      var month = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-      return month[input.getMonth()] + " " + input.getFullYear();
-    };
-  });
-
-  goal.filter('calendarDay', function() {
-    return function(input, date) {
-      if (input < 1) {
-        var d = new Date(date.getFullYear(), date.getMonth(), 0);
-
-        return d.getDate() + input;
-      } else if (input > getDaysInMonth(date)) {
-        var d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-        return input % d.getDate();
-      } else {
-        return input.toString();
+    $scope.currentVisibleMonth = function(w, visible) {
+      if (visible) {
+        $scope.currentMonth = moment().year(w.year).week(w.week).startOf('month');
       }
     };
-  });
 
-  goal.filter('calendarDayStyle', function() {
-    return function(input, date) {
-      if (input < 1 || input > getDaysInMonth(date)) {
-        return "notCurrentMonth";
-      } else {
-        return "currentMonth";
+    $scope.currentMonthClass = function(w, i) {
+      var m = moment().year(w.year).week(w.week).day(i).startOf('month');
+
+      if ($scope.currentMonth.isSame(m)) {
+        return "activeMonth";
       }
     };
-  });
 
-  function getDaysInMonth(date) {
-    var d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    return d.getDate();
-  }
+    $scope.monthTag = function(w) {
+      return moment().year(w.year).week(w.week).endOf('week').format("MMMYYYY");
+    };
+
+    $scope.isMiddleOfMonth = function(d) {
+      return d == 20; // day that determines when active month is highlighted
+    };
+
+    $scope.isCalendarOverflow = function(d, scope) {
+      return (scope.$first && d > 8) || (scope.$last && d < 8);
+    }
+  });
 
 })();

@@ -12,32 +12,23 @@
           </button>
         </div>
       </ion-header-bar>
-      <ion-content style="padding: 10px;">
+      <ion-content scroll="false" style="padding: 10px;">
         <div class="row">
-          <div class="col">{{currentDate|dateString}}</div>
+          <div class="col">{{currentMonth.toDate()|date: "MMMM yyyy"}}</div>
         </div>
 
-        <div class="row">
-          <div class="col col-center" style="text-align: left;">
-            <button class="button button-small button-clear button-dark" ng-click="prevMonth()">
-              <i class="icon ion-chevron-left"></i>
-            </button>
-          </div>
-          <div class="col col-75">
-            <table style="width: 100%;">
-              <tr ng-repeat="week in [0, 1, 2, 3, 4, 5]">
-                <td ng-repeat="day in generateCalendar(week)" style="text-align: center;">
-                  <span ng-class="day|calendarDayStyle:currentDate">{{day|calendarDay:currentDate}}</span>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="col col-center" style="text-align: right;">
-            <button class="button button-small button-clear button-dark" ng-click="nextMonth()">
-              <i class="icon ion-chevron-right"></i>
-            </button>
-          </div>
-        </div>
+        <ion-scroll in-view-container delegate-handle="calendar" scrollbar-y="true" has-bouncing="true" style="height: 180px;">
+          <table style="width: 100%; color: silver;">
+            <tr ng-repeat="week in displayWeeks">
+              <td ng-repeat="day in getDaysOfWeek(week)" style="text-align: center; height: 30px;">
+                <span ng-class="currentMonthClass(week, $index)" ng-hide="isCalendarOverflow(day, $parent)">
+                  <a ng-if="isMiddleOfMonth(day)" in-view="currentVisibleMonth(week, $inview)"></a>
+                  {{day}}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </ion-scroll>
 
         <div class="row">
           <div class="col">

@@ -13,8 +13,8 @@
     $scope.openAddModal = function() {
       $scope.newGoal = {};
       $scope.newGoal.goalId = $scope.goals.length;
-      $scope.newGoal.startDate = new Date();
-      $scope.newGoal.targetDate = new Date($scope.newGoal.startDate.getFullYear(), $scope.newGoal.startDate.getMonth(), $scope.newGoal.startDate.getDate() + 7);
+      $scope.newGoal.startDate = moment("00:00", "hh:mm").toDate();
+      $scope.newGoal.targetDate = moment("00:00", "hh:mm").add(7, 'days').toDate();
       $scope.newGoal.icon = "ion-arrow-right-c";
       $scope.newGoal.theme = "positive";
 
