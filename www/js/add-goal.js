@@ -13,10 +13,12 @@
     $scope.openAddModal = function() {
       $scope.newGoal = {};
       $scope.newGoal.goalId = $scope.goals.length;
-      $scope.newGoal.startDate = moment("00:00", "hh:mm").toDate();
-      $scope.newGoal.targetDate = moment("00:00", "hh:mm").add(7, 'days').toDate();
+      $scope.newGoal.startDate = moment().startOf('day').toDate();
+      $scope.newGoal.targetDate = moment().startOf('day').add(7, 'days').toDate();
       $scope.newGoal.icon = "ion-arrow-right-c";
       $scope.newGoal.theme = "positive";
+      $scope.newGoal.chains = [];
+      $scope.newGoal.currentChain = null;
 
       $scope.modal.show()
     }

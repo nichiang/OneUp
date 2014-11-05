@@ -17,27 +17,34 @@
           <div class="col">{{currentMonth.toDate()|date: "MMMM yyyy"}}</div>
         </div>
 
-        <ion-scroll in-view-container delegate-handle="calendar" scrollbar-y="true" has-bouncing="true" style="height: 180px;">
-          <table style="width: 100%; color: silver;">
+        <div style="height: 15px;"></div>
+
+        <ion-scroll delegate-handle="calendar" scrollbar-y="false" has-bouncing="true" style="height: 180px;">
+          <table style="width: 100%; color: grey;">
             <tr ng-repeat="week in displayWeeks">
-              <td ng-repeat="day in getDaysOfWeek(week)" style="text-align: center; height: 30px;">
-                <span ng-class="currentMonthClass(week, $index)" ng-hide="isCalendarOverflow(day, $parent)">
-                  <a ng-if="isMiddleOfMonth(day)" in-view="currentVisibleMonth(week, $inview)"></a>
+              <td ng-repeat="day in getDaysOfWeek(week)" style="text-align: center; height: 35px;">
+                <div id="{{dayTag(week, $index)}}" class="calendarDay" ng-class="dayClass(week, $index)" ng-hide="isCalendarOverflow(day, $parent)">
+                  <!-- <a ng-if="isMiddleOfMonth(day)" in-view="currentVisibleMonth(week, $inview)"></a> -->
                   {{day}}
-                </span>
+                </div>
               </td>
             </tr>
           </table>
         </ion-scroll>
 
+        <div style="height: 15px;"></div>
+
         <div class="row">
           <div class="col">
+            {{longestChain}} days<br />
             Longest Chain
           </div>
           <div class="col">
+            {{currentChainLength}} days<br />
             Current Chain
           </div>
           <div class="col">
+            {{tillTargetDate}} days<br />
             Until Target Date
           </div>
         </div>

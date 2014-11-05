@@ -39,12 +39,68 @@ ion-no-smoking
 	border-radius: 40px;
 }
 
-.currentMonth {
+.activeMonth {
 	color: #000;
 }
 
-.notCurrentMonth {
-	color: #ddd;
+.calendarDay {
+  margin: 0 auto;
+  max-width: 26px;
+  min-width: 26px;
+  min-height: 26px;
+  text-align: center;
+  line-height: 26px;
+}
+
+.startDayChain, .middleDayChain, .endDayChain, .singleDayChain {
+  border-radius: 13px;
+  position: relative;
+  color: #fff;
+}
+
+.startDayChain:before {
+  content: '';
+  line-height: 0px;
+  position: absolute;
+  z-index: -1;
+  top: 12px;
+  left: 0px;
+  width: 39px;
+  height: 2px;
+}
+
+.middleDayChain:before {
+  content: '';
+  line-height: 0px;
+  position: absolute;
+  z-index: -1;
+  top: 12px;
+  left: -13px;
+  width: 52px;
+  height: 2px;
+}
+
+.endDayChain:before {
+  content: '';
+  line-height: 0px;
+  position: absolute;
+  z-index: -1;
+  top: 12px;
+  left: -13px;
+  width: 39px;
+  height: 2px;
+  background-color: silver;
+}
+
+.singleDayChain:before {
+  content: '';
+  line-height: 0px;
+  position: absolute;
+  z-index: -1;
+  top: 12px;
+  left: 0px;
+  width: 26px;
+  height: 2px;
 }
 
 .goalFlipper {
@@ -118,3 +174,26 @@ ion-no-smoking
   border-radius: 25px;
 }
 
+.positive-before-bg:before {
+  background-color: #4a87ee; 
+}
+
+.calm-before-bg:before {
+  background-color: #43cee6; 
+}
+
+.assertive-before-bg:before {
+  background-color: #ef4e3a; 
+}
+
+.balanced-before-bg:before {
+  background-color: #66cc33; 
+}
+
+.energized-before-bg:before {
+  background-color: #f0b840; 
+}
+
+.royal-before-bg:before {
+  background-color: #8a6de9; 
+}

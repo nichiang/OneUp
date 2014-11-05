@@ -41,6 +41,10 @@
 
     $scope.goals = angular.fromJson($window.localStorage['goals'] || '[]');
 
+    // for (i = 0; i < $scope.goals.length; i++) {
+    //   $scope.updateChains($scope.goals[i]);
+    // }
+
     $scope.headerScrollPosition = 0;
 
     $scope.scrollHeader = function() {
@@ -63,17 +67,52 @@
       });
     }
 
-    $scope.getProgress = function(g) {
-      var today = new Date();
-      var start = Date.parse(g.startDate);
-      var end = Date.parse(g.targetDate);
+    $scope.initGoal = function(g) {
+      var today = moment().startOf('day');
 
-      return Math.min(((today - start) / (end - start)) * 100, 100);
+      g.checkedToday = (g.currentChain != null && moment(g.currentChain.endDate).isSame(today));
+      g.progress = $scope.getProgress(g);
+
+      $scope.updateChains(g);
+    }
+
+    $scope.getProgress = function(g) {
+      var today = moment().startOf('day');
+      var start = moment(g.startDate);
+      var end = moment(g.targetDate);
+
+      return Math.min((today.diff(start, 'days') / end.diff(start, 'days')) * 100, 100);
+    };
+
+    $scope.updateChains = function(g) {
+      var checkDay = moment().startOf('day').subtract(1, 'days');
+
+      if (g.currentChain != null && moment(g.currentChain.endDate).isBefore(checkDay)) {
+        g.chains.push(g.currentChain);
+        g.currentChain = null;
+      }
     };
 
     $scope.checkTodayToggle = function(g) {
+      var today = moment().startOf('day').toDate();
+
+      if (!g.checkedToday) {
+        if (g.currentChain == null) {
+          g.currentChain = {startDate: today, endDate: today};
+        } else {
+          g.currentChain.endDate = today;
+        }
+      } else {
+        if (g.currentChain != null && g.currentChain.startDate === g.currentChain.endDate) {
+          g.currentChain = null;
+        } else {
+          g.currentChain.endDate = moment().startOf('day').subtract(1, 'day').toDate();
+        }
+      }
+
+      $window.localStorage['goals'] = JSON.stringify($scope.goals);
       g.checkedToday = !g.checkedToday;
-    }
+    };
 
     $scope.checkTodayClass = function(g) {
       if (g.checkedToday) {
@@ -83,16 +122,6 @@
       }
     };
   });
-
-/*  app.filter('progress', function() {
-    return function(input) {
-      var today = new Date();
-      var start = Date.parse(input.startDate);
-      var end = Date.parse(input.targetDate);
-
-      return ((today - start) / (end - start)) * 100;
-    };
-  });*/
 
   app.filter('progressDay', function() {
     return function(input) {
