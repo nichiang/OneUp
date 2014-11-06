@@ -1,0 +1,50 @@
+<form name="addEditGoalForm" ng-submit="addSaveGoal()">
+  <div class="row item addItem">
+    <div class="col col-center">
+      Goal
+    </div>
+    <div class="col col-center">
+      <input type="text" placeholder="Goal Title" required ng-model="currentGoal.title" style="text-align: right;" />
+    </div>
+  </div>
+  <div class="row item addItem">
+    <div class="col col-center">
+      Target Date
+    </div>
+    <div class="col col-center" style="text-align: right;">
+      <span ng-bind="currentGoal.targetDate|date:'yyyy-MM-dd'" ng-click="getDate()"></span>
+      <i class="icon button-positive ion-calendar"></i>
+    </div>
+  </div>
+  <div class="row item addItem">
+    <div class="col col-center">
+      Icon
+    </div>
+    <div class="col col-center" style="text-align: right;" ng-click="popover.show($event)" ng-controller="PickIconCtrl">
+      <span class="iconPicker" style="vertical-align: middle;">
+        <i class="icon" ng-class="currentGoal.icon" ng-show="currentGoal.icon"></i>
+      </span>
+      <span style="vertical-align: middle;">
+        <i class="icon ion-arrow-down-b"></i>
+      </span>
+    </div>
+  </div>
+  <div class="row item addItem">
+    <div class="col col-center">
+      Color
+    </div>
+    <div class="col col-center" style="text-align: right;" ng-click="popover.show($event)" ng-controller="PickColorCtrl">
+      <span class="iconPicker" style="vertical-align: middle;">
+        <i class="icon ion-record" ng-class="currentGoal.theme" ng-show="currentGoal.theme"></i>
+      </span>
+      <span style="vertical-align: middle;">
+        <i class="icon ion-arrow-down-b"></i>
+      </span>
+    </div>
+  </div>
+  <div class="row addItem">
+    <div class="col col-center" style="text-align: right;">
+      <input type="submit" class="button button-positive" value="{{formMode}} Goal" />
+    </div>
+  </div>
+</form>

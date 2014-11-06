@@ -23,52 +23,31 @@
     <script src="js/moment.js"></script>
     <script src="js/app.js"></script>
     <script src="js/goal.js"></script>
-    <script src="js/add-goal.js"></script>
+    <script src="js/add-edit-goal.js"></script>
     <script src="js/settings.js"></script>
   </head>
   <body class="stable-bg" ng-app="OneUp" class="platform-android" ng-controller="ListCtrl">
-    <div id="appHeader" style="width: 100%; height: 100%; background-image: url('img/header-bg.jpg'); background-size: 100%; background-position: center bottom; position: absolute; top: calc(-90% + 150px);">
+    <div id="appHeader" style="width: 100%; height: 100%; background-image: url('img/header-bg.jpg'); background-size: 100%; background-position: center bottom; position: absolute; top: calc(-85% + 150px);">
     </div>
 
     <button class="button button-clear button-light headerElements" ng-controller="SettingsCtrl" on-tap="openSettingsModal()" style="position: absolute; right: 0px; top: 0px; z-index: 10;">
       <i class="icon ion-gear-a"></i>
     </button>
 
-    <ion-content has-bouncing="true" on-scroll="scrollHeader();" style="background-color: transparent;">
+    <ion-content oneup-parallax-header has-bouncing="true" style="background-color: transparent;">
       <div class="list paper-shadow-top-z-1">
 
         <ion-item style="background-color: transparent; border-width: 0; height: 150px;">
           <img src="img/logo-white.svg" width="90px" height="90px" style="position: absolute; bottom: 0px;" />
         </ion-item>
 
-        <ion-item ng-repeat="goal in goals track by goal.goalId" ng-controller="GoalCtrl">
-          <div class="row" ng-init="initGoal(goal)">
-            <div class="col col-center" on-tap="openGoalModal(goal)">
-              <h2>{{goal.title}}</h2>
-              <div class="row" style="height: 40px; max-width: calc(100% - {{iconWidths[goal.icon]}}px); position: relative;">
-                <div class="col col-center" style="flex: 0 0 {{goal.progress}}%; max-width: {{goal.progress}}%;">
-                  <div ng-class="goal.theme + '-bg'" style="width: 100%; height: 4px; content: ' ';"></div>
-                </div>
-                <div class="col" ng-class="goal.theme" style="font-size: 40px; margin: 0 2px; flex: 0 0 {{iconWidths[goal.icon]}}px; max-width: {{iconWidths[goal.icon]}}px;">
-                  <i class="{{goal.icon}}"></i>
-                </div>
-                <div class="col col-center" style="flex: 0 0 calc(100% - {{goal.progress}}%); max-width: calc(100% - {{goal.progress}}%);">
-                  <div style="width: 100%; height: 4px; background-color: silver; content: ' ';"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col col-33 col-center" style="text-align: right;">
-              <button class="paper-shadow-top-z-1" ng-class="checkTodayClass(goal)" on-tap="checkTodayToggle(goal)">
-                <span ng-hide="goal.checkedToday">Day {{goal|progressDay}}</span>
-                <i class="icon ion-checkmark" ng-show="goal.checkedToday"></i>
-              </button>
-            </div>
-          </div>
+        <ion-item ng-repeat="goal in goals track by goal.goalId">
+          <oneup-goal-row goal="goal" all-goals="goals"></oneup-goal-row>
         </ion-item>
 
         <ion-item>
-          <div style="text-align: center;" ng-controller="AddGoalCtrl" on-tap="openAddModal()">
-            <button class="button button-large button-clear button-positive" on-tap="openAddModal()">
+          <div style="text-align: center;" ng-controller="AddEditGoalCtrl">
+            <button class="button button-large button-clear button-positive" on-tap="openAddEditModal()">
               <i class="icon ion-plus"></i>
             </button>
           </div>

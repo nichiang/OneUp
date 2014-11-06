@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col col-center" on-tap="openGoalModal(goal)" ng-controller="GoalCtrl">
+    <h2>{{goal.title}}</h2>
+    <div class="row" style="height: 40px; max-width: calc(100% - {{iconWidths[goal.icon]}}px); position: relative;">
+      <div class="col col-center" style="flex: 0 0 {{goal.progress}}%; max-width: {{goal.progress}}%;">
+        <div ng-class="goal.theme + '-bg'" style="width: 100%; height: 4px; content: ' ';"></div>
+      </div>
+      <div class="col" ng-class="goal.theme" style="font-size: 40px; margin: 0 2px; flex: 0 0 {{iconWidths[goal.icon]}}px; max-width: {{iconWidths[goal.icon]}}px;">
+        <i class="{{goal.icon}}"></i>
+      </div>
+      <div class="col col-center" style="flex: 0 0 calc(100% - {{goal.progress}}%); max-width: calc(100% - {{goal.progress}}%);">
+        <div style="width: 100%; height: 4px; background-color: silver; content: ' ';"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col col-33 col-center" style="text-align: right;">
+    <button ng-class="goalRowCtrl.checkTodayClass()" on-tap="goalRowCtrl.checkTodayToggle()">
+      <span ng-hide="goal.checkedToday">Day {{goal|progressDay}}</span>
+      <i class="icon ion-checkmark" ng-show="goal.checkedToday"></i>
+    </button>
+  </div>
+</div>

@@ -21,12 +21,15 @@
 
     $scope.openGoalModal = function(g) {
       $scope.currentGoal = g;
+      $scope.formMode = "Edit";
       $scope.showFlipped = false;
       
       $scope.currentMonth = moment().startOf('month');
-      $scope.displayWeeks = [];
-      $scope.initCalendar();
       $scope.tillTargetDate = moment($scope.currentGoal.targetDate).diff(moment(), 'days');
+      $scope.displayWeeks = [];
+
+      $scope.initChains();
+      $scope.initCalendar();
 
       $scope.modal.show()
     };
@@ -44,14 +47,14 @@
 
         // change orientation of backGoal back to front facing 10 ms after animation completes
         $timeout(function() {
-          $scope.backStyle = {'-webkit-transform': 'rotateY(0deg)', 'transform': 'rotateY(0deg)'};
+          $scope.backStyle = {'display': 'none','-webkit-transform': 'rotateY(0deg)', 'transform': 'rotateY(0deg)'};
         }, 610);
 
         $scope.showFlipped = false;
       } else {
 
         // change orientation of backGoal to back facing in preparation for flip animation
-        $scope.backStyle = {'-webkit-transform': 'rotateY(180deg)', 'transform': 'rotateY(180deg)'};
+        $scope.backStyle = {'display': 'block', '-webkit-transform': 'rotateY(180deg)', 'transform': 'rotateY(180deg)'};
         $scope.showFlipped = true;
       }
     };
@@ -61,7 +64,6 @@
       var displayWeeksEnd = moment($scope.currentGoal.targetDate).endOf('month');
       var displayWeeksDiff = displayWeeksEnd.diff(displayWeeksStart, 'weeks');
 
-      $scope.initChains();
       $scope.displayWeeks.push({'week': displayWeeksStart.week(), 'year': displayWeeksStart.year()});
 
       for (i = 0; i <= displayWeeksDiff; i++) {
@@ -79,12 +81,6 @@
       }
 
       return daysOfWeek;
-    };
-
-    $scope.currentVisibleMonth = function(w, visible) {
-      if (visible) {
-        $scope.currentMonth = moment().year(w.year).week(w.week).startOf('month');
-      }
     };
 
     $scope.dayClass = function(w, i) {
@@ -109,29 +105,30 @@
       return "d" + moment().year(w.year).week(w.week).day(i).format("YYYYMMDD");
     };
 
-    $scope.isMiddleOfMonth = function(d) {
-      return d == 20; // day that determines when active month is highlighted
-    };
-
     $scope.isCalendarOverflow = function(d, scope) {
       return (scope.$last && d < 8);
     };
 
     $scope.initChains = function() {
       $scope.chains = [];
+      $scope.longestChain = 0;
+      $scope.currentChainLength = 0;
 
       var allChains = $scope.currentGoal.chains.slice(0);
-      allChains.push($scope.currentGoal.currentChain);
+
+      if ($scope.currentGoal.currentChain != null) {
+        allChains.push($scope.currentGoal.currentChain);
+      }
 
       for (i = 0; i < allChains.length; i++) {
         var startDay = moment(allChains[i].startDate);
         var endDay = moment(allChains[i].endDate);
-        var daysDiff = endDay.diff(startDay, 'days');
+        var daysDiff = endDay.diff(startDay, 'days') + 1;
 
-        if (daysDiff > 0) {
+        if (daysDiff > 1) {
           $scope.chains["d" + startDay.format("YYYYMMDD")] = "startDayChain";
 
-          for (j = 0; j < daysDiff - 1; j++) {
+          for (j = 0; j < daysDiff - 2; j++) {
             $scope.chains["d" + startDay.add(1, 'days').format("YYYYMMDD")] = "middleDayChain";
           }
 
@@ -141,11 +138,11 @@
         }
 
         if (daysDiff > $scope.longestChain) {
-          $scope.longestChain = daysDiff + 1;
+          $scope.longestChain = daysDiff;
         }
 
         if ($scope.currentGoal.currentChain != null && i == allChains.length - 1) {
-          $scope.currentChainLength = daysDiff + 1;
+          $scope.currentChainLength = daysDiff;
         }
       }
     };

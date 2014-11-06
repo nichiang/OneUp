@@ -1,6 +1,6 @@
 (function(){
 
-  var app = angular.module('OneUp', ['ionic', 'ngCordova', 'OneUp-Goal', 'OneUp-AddGoal', 'OneUp-Settings']);
+  var app = angular.module('OneUp', ['ionic', 'ngCordova', 'OneUp-Goal', 'OneUp-AddEditGoal', 'OneUp-Popovers', 'OneUp-Settings']);
 
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -15,110 +15,106 @@
     });
   });
 
-  app.controller('ListCtrl', function($scope, $window, $document, $ionicScrollDelegate){
-    $scope.iconWidths = {
-      'ion-arrow-right-c': 28,
-      'ion-flag': 30,
-      'ion-heart': 33,
-      'ion-settings': 33,
-      'ion-document-text': 23,
-      'ion-map': 35,
-      'ion-pie-graph': 35,
-      'ion-aperture': 35,
-      'ion-iphone': 15,
-      'ion-code': 35,
-      'ion-bug': 35,
-      'ion-game-controller-b': 35,
-      'ion-videocamera': 35,
-      'ion-music-note': 30,
-      'ion-cash': 40,
-      'ion-trophy': 35,
-      'ion-university': 35,
-      'ion-beaker': 30,
-      'ion-lightbulb': 20,
-      'ion-no-smoking': 35
-    };
-
+  app.controller('ListCtrl', function($scope, $window){
     $scope.goals = angular.fromJson($window.localStorage['goals'] || '[]');
+  });
 
-    // for (i = 0; i < $scope.goals.length; i++) {
-    //   $scope.updateChains($scope.goals[i]);
-    // }
+  app.directive('oneupParallaxHeader', function($document, $ionicScrollDelegate) {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        elem.bind('scroll', function() {
+          var amt = 0 - ($ionicScrollDelegate.getScrollPosition().top * 0.8);
+          var fadeAmt = 1 - (($ionicScrollDelegate.getScrollPosition().top - 80) / 30);
 
-    $scope.headerScrollPosition = 0;
+          ionic.requestAnimationFrame(function() {
+            var appHeader = $document[0].body.querySelector('#appHeader');
+            var headerElements = $document[0].body.querySelector('.headerElements');
 
-    $scope.scrollHeader = function() {
-      var amt = 0 - ($ionicScrollDelegate.getScrollPosition().top * 0.5);
-      var fadeAmt = 1 - (($ionicScrollDelegate.getScrollPosition().top - 80) / 30);
+            appHeader.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + amt + 'px, 0)';
+            
+            headerElements.style.opacity = fadeAmt;
 
-      ionic.requestAnimationFrame(function() {
-        var appHeader = $document[0].body.querySelector('#appHeader');
-        var headerElements = $document[0].body.querySelector('.headerElements');
-
-        appHeader.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + amt + 'px, 0)';
-        
-        headerElements.style.opacity = fadeAmt;
-
-        if (fadeAmt <= 0) {
-          headerElements.style.visibility = "hidden";  
-        } else {
-          headerElements.style.visibility = "visible";  
-        }
-      });
-    }
-
-    $scope.initGoal = function(g) {
-      var today = moment().startOf('day');
-
-      g.checkedToday = (g.currentChain != null && moment(g.currentChain.endDate).isSame(today));
-      g.progress = $scope.getProgress(g);
-
-      $scope.updateChains(g);
-    }
-
-    $scope.getProgress = function(g) {
-      var today = moment().startOf('day');
-      var start = moment(g.startDate);
-      var end = moment(g.targetDate);
-
-      return Math.min((today.diff(start, 'days') / end.diff(start, 'days')) * 100, 100);
-    };
-
-    $scope.updateChains = function(g) {
-      var checkDay = moment().startOf('day').subtract(1, 'days');
-
-      if (g.currentChain != null && moment(g.currentChain.endDate).isBefore(checkDay)) {
-        g.chains.push(g.currentChain);
-        g.currentChain = null;
+            if (fadeAmt <= 0) {
+              headerElements.style.visibility = "hidden";  
+            } else {
+              headerElements.style.visibility = "visible";  
+            }
+          });
+        });
       }
     };
+  });
 
-    $scope.checkTodayToggle = function(g) {
-      var today = moment().startOf('day').toDate();
+  app.directive('oneupGoalRow', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        goal: '=',
+        allGoals: '='
+      },
+      templateUrl: 'goal-row-template.html',
+      controller: function($scope, $window) {
+        $scope.iconWidths = {
+          'ion-arrow-right-c': 28, 'ion-flag': 30, 'ion-heart': 33, 'ion-settings': 33, 'ion-document-text': 23, 'ion-map': 35, 'ion-pie-graph': 35, 'ion-aperture': 35, 'ion-iphone': 15, 'ion-code': 35, 'ion-bug': 35, 'ion-game-controller-b': 35, 'ion-videocamera': 35, 'ion-music-note': 30, 'ion-cash': 40, 'ion-trophy': 35, 'ion-university': 35, 'ion-beaker': 30, 'ion-lightbulb': 20, 'ion-no-smoking': 35 
+        };
 
-      if (!g.checkedToday) {
-        if (g.currentChain == null) {
-          g.currentChain = {startDate: today, endDate: today};
-        } else {
-          g.currentChain.endDate = today;
-        }
-      } else {
-        if (g.currentChain != null && g.currentChain.startDate === g.currentChain.endDate) {
-          g.currentChain = null;
-        } else {
-          g.currentChain.endDate = moment().startOf('day').subtract(1, 'day').toDate();
-        }
-      }
+        this.goal = $scope.goal;
 
-      $window.localStorage['goals'] = JSON.stringify($scope.goals);
-      g.checkedToday = !g.checkedToday;
-    };
+        this.checkTodayToggle = function() {
+          var today = moment().startOf('day').toDate();
 
-    $scope.checkTodayClass = function(g) {
-      if (g.checkedToday) {
-        return ['button', 'button-large', 'checkTodayButton', 'button-' + g.theme];
-      } else {
-        return ['button', 'checkTodayButton', 'button-stable'];
+          if (!this.goal.checkedToday) {
+            if (this.goal.currentChain == null) {
+              this.goal.currentChain = {startDate: today, endDate: today};
+            } else {
+              this.goal.currentChain.endDate = today;
+            }
+          } else {
+            if (this.goal.currentChain != null && this.goal.currentChain.startDate === this.goal.currentChain.endDate) {
+              this.goal.currentChain = null;
+            } else {
+              this.goal.currentChain.endDate = moment().startOf('day').subtract(1, 'day').toDate();
+            }
+          }
+
+          $window.localStorage['goals'] = JSON.stringify($scope.allGoals);
+          this.goal.checkedToday = !this.goal.checkedToday;
+        };
+
+        this.checkTodayClass = function() {
+          if (this.goal.checkedToday) {
+            return ['button', 'button-large', 'checkTodayButton', 'paper-shadow-top-z-1', 'button-' + this.goal.theme];
+          } else {
+            return ['button', 'checkTodayButton', 'paper-shadow-top-z-2', 'button-stable'];
+          }
+        };
+
+        $scope.getProgress = function() {
+          var today = moment().startOf('day');
+          var start = moment(this.goal.startDate);
+          var end = moment(this.goal.targetDate);
+
+          return Math.min((today.diff(start, 'days') / end.diff(start, 'days')) * 100, 100);
+        };
+
+        $scope.updateChains = function() {
+          var checkDay = moment().startOf('day').subtract(1, 'days');
+
+          if (this.goal.currentChain != null && moment(this.goal.currentChain.endDate).isBefore(checkDay)) {
+            this.goal.chains.push(this.goal.currentChain);
+            this.goal.currentChain = null;
+          }
+        };
+      },
+      controllerAs: 'goalRowCtrl',
+      link: function(scope, elem, attrs) {
+        var today = moment().startOf('day');
+
+        scope.goal.checkedToday = (scope.goal.currentChain != null && moment(scope.goal.currentChain.endDate).isSame(today));
+        scope.goal.progress = scope.getProgress();
+
+        scope.updateChains();
       }
     };
   });

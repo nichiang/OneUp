@@ -1,29 +1,5 @@
-/* Empty. Add your own CSS if you like */
 
-/*
-Icon list:
-
-ion-arrow-right-b
-ion-flag
-ion-heart
-ion-settings
-ion-document-text
-ion-map
-ion-pie-graph
-ion-aperture
-ion-iphone
-ion-code
-ion-bug
-ion-game-controller-b
-ion-videocamera
-ion-music-note
-ion-cash
-ion-trophy
-ion-university
-ion-beaker
-ion-lightbulb
-ion-no-smoking
-*/
+/* main page ------------------------------------------------------------ */
 
 .goalIcon {
   position: absolute; 
@@ -39,6 +15,52 @@ ion-no-smoking
 	border-radius: 40px;
 }
 
+
+/* goal page ------------------------------------------------------------ */
+
+.metric {
+  text-align: center;
+  margin: 5px;
+}
+
+.metricsLabel {
+  font-family: OpenSansSemibold;
+  font-size: 40px;
+  line-height: 36px;
+}
+
+.metricsSubLabel {
+  font-family: OpenSansCondensedLight;
+  font-size: 14px;
+  line-height: 30px;
+}
+
+
+/* goal page: calendar view ------------------------------------------------------------ */
+
+.calendarScroll {
+  height: 220px;
+}
+
+.calendarScroll:before {
+  content: '';
+  width: 100%;
+  height: 15px;
+  z-index: 10;
+  position: absolute;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1),  rgba(255, 255, 255, 0));
+}
+
+.calendarScroll:after {
+  content: '';
+  width: 100%;
+  height: 15px;
+  z-index: 10;
+  position: absolute;
+  bottom: 0px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 1),  rgba(255, 255, 255, 0));
+}
+
 .activeMonth {
 	color: #000;
 }
@@ -50,10 +72,10 @@ ion-no-smoking
   min-height: 26px;
   text-align: center;
   line-height: 26px;
+  border-radius: 13px;
 }
 
 .startDayChain, .middleDayChain, .endDayChain, .singleDayChain {
-  border-radius: 13px;
   position: relative;
   color: #fff;
 }
@@ -103,6 +125,9 @@ ion-no-smoking
   height: 2px;
 }
 
+
+/* goal page: view/edit goal flip ------------------------------------------------------------ */
+
 .goalFlipper {
   position: absolute;
   min-height: 90%;
@@ -134,6 +159,7 @@ ion-no-smoking
   left: 0px;
   min-height: 100%;
   min-width: 100%;
+  border-radius: 4px;
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
   -webkit-animation-fill-mode: both;
@@ -153,7 +179,11 @@ ion-no-smoking
   /* goalBack starts as front facing to allow browser to prerender div before flip animation */
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
+  display: none;
 }
+
+
+/* add/edit goal ------------------------------------------------------------ */
 
 .addItem {
   height: 70px;
@@ -172,6 +202,18 @@ ion-no-smoking
   width: 50px;
   height: 50px;
   border-radius: 25px;
+}
+
+.iconPicker {
+  font-size: 35px;
+}
+
+/* utility ------------------------------------------------------------ */
+
+.modalTitle {
+  background-color: transparent;
+  font-family: OpenSansSemibold;
+  font-size: 20px !important;
 }
 
 .positive-before-bg:before {
@@ -196,4 +238,9 @@ ion-no-smoking
 
 .royal-before-bg:before {
   background-color: #8a6de9; 
+}
+
+.barRoundedTop {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
