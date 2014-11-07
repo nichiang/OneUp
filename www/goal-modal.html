@@ -4,10 +4,10 @@
       <ion-header-bar class="barRoundedTop" align-title="left">
         <h1 class="modalTitle title">{{currentGoal.title}}</h1>
         <div style="position: absolute; top: 0px; right: 5px; min-width: 80px; text-align: right;">
-          <button class="button button-small button-clear button-dark" ng-click="toggleEdit();">
+          <button class="button button-small button-clear button-dark" on-tap="toggleEdit();">
             <i class="icon ion-edit"></i>
           </button>
-          <button class="button button-small button-clear button-dark" ng-click="closeGoalModal();">
+          <button class="button button-small button-clear button-dark" on-tap="closeGoalModal();">
             <i class="icon ion-close"></i>
           </button>
         </div>
@@ -19,16 +19,19 @@
 
         <div style="height: 15px;"></div>
 
-        <ion-scroll class="calendarScroll" delegate-handle="calendar" scrollbar-y="false" has-bouncing="true">
-          <table style="width: 100%; color: grey;">
-            <tr ng-repeat="week in displayWeeks">
-              <td ng-repeat="day in getDaysOfWeek(week)" style="text-align: center; height: 35px;">
-                <div id="{{dayTag(week, $index)}}" class="calendarDay" ng-class="dayClass(week, $index)" ng-hide="isCalendarOverflow(day, $parent)">
-                  {{day}}
-                </div>
-              </td>
-            </tr>
-          </table>
+        <ion-scroll class="calendarScroll" delegate-handle="calendar" scrollbar-y="false" has-bouncing="true" ng-switch on="showCalendar">
+          <div class="calendarView" ng-switch-when="true">
+            <table style="width: 100%; color: grey;">
+              <tr ng-repeat="week in displayWeeks">
+                <td ng-repeat="day in getDaysOfWeek(week)" style="text-align: center; height: 35px;">
+                  <div id="{{dayTag(week, $index)}}" class="calendarDay" ng-class="dayClass(week, $index)" ng-hide="isCalendarOverflow(day, $parent)">
+                    {{day}}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div ng-switch-when="false"></div>
         </ion-scroll>
 
         <div style="height: 15px;"></div>
@@ -53,16 +56,16 @@
       <ion-header-bar class="barRoundedTop bar-stable" align-title="left">
         <h1 class="modalTitle title">Edit Goal</h1>
         <div style="position: absolute; top: 0px; right: 5px; min-width: 80px; text-align: right;">
-          <button class="button button-small button-clear button-dark" ng-click="toggleEdit();">
+          <button class="button button-small button-clear button-dark" on-tap="toggleEdit();">
             <i class="icon ion-edit"></i>
           </button>
-          <button class="button button-small button-clear button-dark" ng-click="closeGoalModal();">
+          <button class="button button-small button-clear button-dark" on-tap="closeGoalModal();">
             <i class="icon ion-close"></i>
           </button>
         </div>
       </ion-header-bar>
       <ion-content style="padding: 10px;" overflow-scroll="true">
-        <oneup-add-edit-form></oneup-add-edit-form>
+        <oneup-add-edit-form mode="edit" goal="currentGoal" all-goals="goals" on-save="toggleEdit()"></oneup-add-edit-form>
       </ion-content>
     </div>
   </div>

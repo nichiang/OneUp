@@ -1,11 +1,11 @@
 <div class="modal card" style="width: 90%; min-height: 90%; top: 5%; left: 5%; margin: 0;">
   <ion-header-bar align-title="left">
     <h1 class="modalTitle title">New Goal</h1>
-    <button class="button button-small button-clear button-dark" ng-click="closeAddEditModal();">
+    <button class="button button-small button-clear button-dark" on-tap="closeAddEditModal();">
       <i class="icon ion-close"></i>
     </button>
   </ion-header-bar>
   <ion-content style="padding: 10px;" overflow-scroll="true">
-    <oneup-add-edit-form></oneup-add-edit-form>
+    <oneup-add-edit-form mode="add" all-goals="goals" on-save="closeAddEditModal()"></oneup-add-edit-form>
   </ion-content>
 </div>

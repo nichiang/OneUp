@@ -38,6 +38,17 @@
 
 /* goal page: calendar view ------------------------------------------------------------ */
 
+.calendarView.ng-animate {
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+
+  opacity: 0;
+}
+
+.calendarView.ng-enter {
+  opacity: 1;
+}
+
 .calendarScroll {
   height: 220px;
 }
@@ -79,6 +90,16 @@
   position: relative;
   color: #fff;
 }
+
+/*.startDayChain:before {
+  content: '';
+  background: linear-gradient(to top left,
+                 rgba(0,0,0,0) 0%,
+                 rgba(0,0,0,0) calc(50% - 0.8px),
+                 rgba(0,0,0,1) 50%,
+                 rgba(0,0,0,0) calc(50% + 0.8px),
+                 rgba(0,0,0,0) 100%);
+}*/
 
 .startDayChain:before {
   content: '';
@@ -179,7 +200,6 @@
   /* goalBack starts as front facing to allow browser to prerender div before flip animation */
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
-  display: none;
 }
 
 

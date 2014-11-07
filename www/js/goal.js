@@ -31,11 +31,22 @@
       $scope.initChains();
       $scope.initCalendar();
 
-      $scope.modal.show()
+      $scope.modal.show();
+
+      // delay load the calendar view until after the entrance transition has completed
+      $timeout(function() {
+        $scope.showCalendar = true;
+        $ionicScrollDelegate.$getByHandle('calendar').scrollBottom(true);
+      }, 500);
     };
 
     $scope.closeGoalModal = function() {
       $scope.modal.hide();
+      $scope.showCalendar = false;
+
+      $timeout(function() {
+        $scope.showFlipped = false;
+      }, 300);
     };
 
     $scope.$on('$destroy', function() {
@@ -47,15 +58,19 @@
 
         // change orientation of backGoal back to front facing 10 ms after animation completes
         $timeout(function() {
-          $scope.backStyle = {'display': 'none','-webkit-transform': 'rotateY(0deg)', 'transform': 'rotateY(0deg)'};
+          $scope.backStyle = {'-webkit-transform': 'rotateY(0deg)', 'transform': 'rotateY(0deg)'};
         }, 610);
 
         $scope.showFlipped = false;
       } else {
 
         // change orientation of backGoal to back facing in preparation for flip animation
-        $scope.backStyle = {'display': 'block', '-webkit-transform': 'rotateY(180deg)', 'transform': 'rotateY(180deg)'};
-        $scope.showFlipped = true;
+        $scope.backStyle = {'-webkit-transform': 'rotateY(180deg)', 'transform': 'rotateY(180deg)'};
+        
+        // delay flip until css styles set
+        $timeout(function() {
+          $scope.showFlipped = true;
+        }, 50);
       }
     };
 
@@ -70,7 +85,7 @@
         $scope.displayWeeks.push({'week': displayWeeksStart.add(1, 'weeks').week(), 'year': displayWeeksStart.year()});
       }
 
-      $ionicScrollDelegate.$getByHandle('calendar').scrollBottom(false);
+      // $ionicScrollDelegate.$getByHandle('calendar').scrollBottom(false);
     };
 
     $scope.getDaysOfWeek = function(w) {

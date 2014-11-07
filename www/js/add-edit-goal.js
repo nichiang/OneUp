@@ -14,15 +14,15 @@
     $scope.openAddEditModal = function() {
       $scope.formMode = "Add";
 
-      $scope.currentGoal = {
-        goalId: $scope.goals.length,
-        startDate: moment().startOf('day').toDate(),
-        targetDate: moment().startOf('day').add(7, 'days').toDate(),
-        icon: "ion-arrow-right-c",
-        theme: "positive",
-        chains: [],
-        currentChain: null
-      };
+      // $scope.currentGoal = {
+      //   goalId: $scope.goals.length,
+      //   startDate: moment().startOf('day').toDate(),
+      //   targetDate: moment().startOf('day').add(7, 'days').toDate(),
+      //   icon: "ion-arrow-right-c",
+      //   theme: "positive",
+      //   chains: [],
+      //   currentChain: null
+      // };
 
       $scope.modal.show()
     }
@@ -39,26 +39,48 @@
   addEditGoal.directive('oneupAddEditForm', function() {
     return {
       restrict: 'E',
-      scope: false,
+      scope: {
+        mode: '@',
+        goal: '=?',
+        allGoals: '=',
+        onSave: '&'
+      },
       controller: function($scope, $window) {
         $scope.getDate = function() {
-          datePicker.show({date: $scope.currentGoal.targetDate, mode: 'date'}, function(date){
-            $scope.currentGoal.targetDate = date; 
+          datePicker.show({date: $scope.goal.targetDate, mode: 'date'}, function(date){
+            $scope.goal.targetDate = date; 
           });
         };
 
         $scope.addSaveGoal = function() {
-          if ($scope.formMode === "add") {
-            $scope.goals.push($scope.currentGoal);
+          if ($scope.mode === "add") {
+            $scope.allGoals.push($scope.goal);
           }
           
-          $window.localStorage['goals'] = JSON.stringify($scope.goals);
+          $window.localStorage['goals'] = JSON.stringify($scope.allGoals);
 
-          $scope.closeAddEditModal();
+          $scope.onSave();
         }
       },
-      templateUrl: 'add-edit-template.html'
-    }
+      templateUrl: 'add-edit-template.html',
+      link: function(scope, elem, attrs) {
+        if (scope.mode === 'add') {
+          scope.goal = {
+            goalId: scope.allGoals.length,
+            startDate: moment().startOf('day').toDate(),
+            targetDate: moment().startOf('day').add(7, 'days').toDate(),
+            icon: "ion-arrow-right-c",
+            theme: "positive",
+            chains: [],
+            currentChain: null
+          };
+
+          scope.saveButton = "Add Goal";
+        } else {
+          scope.saveButton = "Save";
+        }
+      }
+    };
   });
 
   goalPopovers.controller('PickColorCtrl', function($scope, $ionicPopover) {
@@ -71,7 +93,7 @@
     });
 
     $scope.setTheme = function(t) {
-      $scope.currentGoal.theme = t;
+      $scope.goal.theme = t;
       $scope.popover.hide();
     };
   });
@@ -86,7 +108,7 @@
     });
 
     $scope.setIcon = function(i) {
-      $scope.currentGoal.icon = i;
+      $scope.goal.icon = i;
       $scope.popover.hide();
     };
   });
